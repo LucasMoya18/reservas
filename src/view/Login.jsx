@@ -1,52 +1,95 @@
 import '../css/login.css';
 import { useState } from 'react';
-
+import { registrarUsuario, loguearUsuario } from '../apis/cncApiUsuarios';
 function Login() {
     const [toggleRegistro, setToggleRegistro] = useState(false);
-    const [loginData, setLoginData] = useState({ email: '', password: '' });
-    const [registerData, setRegisterData] = useState({ name: '', email: '', password: '' });
+    
+    const [emailUserLogin,setEmailUserLogin] = useState('')
+    const [passwUserLogin,setPasswUserLogin] = useState('')
+
+    const [nameUserRegister, setNameUserRegister] = useState('');
+    const [emailUserRegister, setEmailUserRegister] = useState('');
+    const [passwUserRegister, setPasswUserRegister] = useState('');
 
     function handleToggleRegistro() {
         setToggleRegistro(!toggleRegistro);
-        console.log(toggleRegistro)
+        
+        setEmailUserLogin('');
+        setPasswUserLogin('');
+
+        setEmailUserRegister('');
+        setNameUserRegister('');
+        setPasswUserRegister('');
     }
 
-    function handleLoginChange(e) {
-        const { name, value } = e.target;
-        setLoginData({ ...loginData, [name]: value });
+
+
+    function handleLoginEmail(e){
+        setEmailUserLogin(e);
+     
+    }
+    function handleLoginPassw(e){
+        setPasswUserLogin(e);
+     
     }
 
-    function handleRegisterChange(e) {
-        const { name, value } = e.target;
-        setRegisterData({ ...registerData, [name]: value });
-    }
-
-    function handleLoginSubmit(e) {
+    //VALIDAR LOGIN
+    function handleLoginVal(e){
         e.preventDefault();
-        console.log('Login Data:', loginData);
+        const credenciales = {
+            email: emailUserLogin,
+            passw: passwUserLogin
+        }
+        console.log(credenciales)
+        loguearUsuario(credenciales);
     }
 
-    function handleRegisterSubmit(e) {
+
+    
+
+
+    function handleRegisterName(e) {
+        setNameUserRegister(e);
+      
+    }
+
+    function handleRegisterEmail(e) {
+        setEmailUserRegister(e);
+        
+    }
+
+    function handleRegisterPassw(e) {
+        setPasswUserRegister(e);
+        
+    }
+
+    //VALIDAR REGISTRO
+    function handleRegisterVal(e){
         e.preventDefault();
-        console.log('Register Data:', registerData);
+        const datosUsuario = {
+            nombre: nameUserRegister,
+            email: emailUserRegister,
+            passw: passwUserRegister
+        }
+        registrarUsuario(datosUsuario);
     }
 
     return (
         <div className="container-login">
-            <div className={`contenedor-Login-Registro justify-content-center`}>
+            <div className='contenedor-Login-Registro justify-content-center'>
                 <div className='row'>
                     {!toggleRegistro ? <>
                         <div className={`col-12 login login-container align-items-center align-content-center ${!toggleRegistro ? 'visible' : 'hidden'}`}>
-                        <h1>Iniciar sesión</h1>
-                        <form onSubmit={handleLoginSubmit}>
+                        <h1 className='tituloLoginReg'>Iniciar sesión</h1>
+                        <form onSubmit={handleLoginVal}>
                             <div className="mb-3">
                                 <label className="form-label">Email</label>
                                 <input
                                     type="email"
                                     className="form-control"
                                     name="email"
-                                    value={loginData.email}
-                                    onChange={handleLoginChange}
+                                    value={emailUserLogin}
+                                    onChange={(e)=>{ handleLoginEmail(e.target.value)}}
                                     required
                                 />
                             </div>
@@ -56,8 +99,8 @@ function Login() {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    value={loginData.password}
-                                    onChange={handleLoginChange}
+                                    value={passwUserLogin}
+                                    onChange={(e)=>{handleLoginPassw(e.target.value)}}
                                     required
                                 />
                             </div>
@@ -72,16 +115,16 @@ function Login() {
                     </div>
                     </> : <>
                     <div className={`login registro-container align-items-center align-content-center ${!toggleRegistro ? 'hidden' : 'visible'}`}>
-                        <h1>Registro</h1>
-                        <form onSubmit={handleRegisterSubmit}>
+                        <h1 className='tituloLoginReg'> Registro</h1>
+                        <form onSubmit={handleRegisterVal}>
                             <div className="mb-3">
                                 <label className="form-label">Nombre</label>
                                 <input
                                     type="text"
                                     className="form-control"
                                     name="name"
-                                    value={registerData.name}
-                                    onChange={handleRegisterChange}
+                                    value={nameUserRegister}
+                                    onChange={(e)=>{handleRegisterName(e.target.value)}}
                                     required
                                 />
                             </div>
@@ -91,8 +134,8 @@ function Login() {
                                     type="email"
                                     className="form-control"
                                     name="email"
-                                    value={registerData.email}
-                                    onChange={handleRegisterChange}
+                                    value={emailUserRegister}
+                                    onChange={(e)=>{handleRegisterEmail(e.target.value)}}
                                     required
                                 />
                             </div>
@@ -102,8 +145,8 @@ function Login() {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    value={registerData.password}
-                                    onChange={handleRegisterChange}
+                                    value={passwUserRegister}
+                                    onChange={(e)=>{handleRegisterPassw(e.target.value)}}
                                     required
                                 />
                             </div>
