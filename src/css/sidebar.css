@@ -1,0 +1,155 @@
+/* Estilos básicos para la sidebar */
+.sidebar {
+    width: 20%;
+    height: 100vh;
+    background-color: #f8f3f3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Ocultar sidebar en pantallas pequeñas */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -100%; /* Oculta la barra fuera del viewport */
+        width: 70%;
+        z-index: 1000;
+    }
+
+    /* Clase para mostrar la barra lateral */
+    .sidebar.active {
+        left: 0;
+    }
+}
+
+/* Estilos para el resto del contenido */
+.user-section {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    width: 100%;
+    
+}
+
+.user-icon {
+
+    width: 100px;
+    height: 100px;
+    
+    
+}
+
+.user-icon svg{
+    width: 100%;
+    height: 100%;
+    
+    
+}
+.datos-usuario{
+    display: flex;
+    flex-direction: column;
+    margin-left:10px;
+}
+.user-role {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 0px;
+    margin-left: -5px;
+    
+    
+}
+
+.options {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4c51bf;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.option-btn:hover{
+    background-color: #2028c4;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.Log-Out{
+    
+    width: 50%;
+    padding: 5px;
+    margin-top: 10px;
+    background-color: #f66565;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;   
+    
+
+}
+
+.Log-Out:hover{
+    background-color: #f92828;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.pagination-dots {
+    margin-top: auto;
+    display: flex;
+    gap: 5px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+/* Para que las dots queden centradas en responsive */
+@media (max-width: 768px) {
+    .pagination-dots {
+        justify-content: center;
+    }
+}
+
+
+/* Botón Hamburguesa */
+.menu-btn {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1500;
+    background-color: #4c51bf;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Mostrar botón en pantallas pequeñas */
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
