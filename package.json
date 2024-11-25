@@ -10,9 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@devexpress/dx-react-core": "^4.0.9",
-    "@devexpress/dx-react-scheduler": "^4.0.9",
-    "@devexpress/dx-react-scheduler-material-ui": "^4.0.9",
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
     "@fullcalendar/core": "^6.1.15",
@@ -23,11 +20,9 @@
     "@mui/icons-material": "^5.16.7",
     "@mui/lab": "^5.0.0-alpha.79",
     "@mui/material": "^5.16.7",
-    "@mui/x-date-pickers": "^5.0.20",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1",
