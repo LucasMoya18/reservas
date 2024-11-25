@@ -1,0 +1,63 @@
+
+.fc-timegrid-slot .fc-time {
+    line-height: 30px; 
+    
+}
+
+.fc-timegrid-slot.fc-timegrid-slot-lane{
+    background-color: rgb(250, 253, 255) !important;
+}
+.fc-timegrid-axis{
+    background-color: rgb(250, 253, 255) !important;
+}
+.fc-timegrid-slot-label-frame.fc-scrollgrid-shrink-frame{
+    background-color: rgb(250, 253, 255) !important;
+}
+
+.fc-timegrid-slot.fc-timegrid-slot-label.fc-timegrid-slot-minor{
+    background-color: rgb(250, 253, 255) !important;
+}
+
+.fc-col-header-cell.fc-day-disabled{
+    background-color: rgb(255, 255, 255) !important;
+}
+
+.fc-day-disabled.fc-timegrid-col .fc-timegrid-now-indicator-container{
+    background-color: rgba(0, 0, 0, 0.329) !important;
+    z-index: 30;
+}
+
+.fc-timegrid-slot.fc-timegrid-slot-label.fc-scrollgrid-shrink{
+    background-color: rgb(250, 253, 255) !important;
+}
+
+.fc-col-header-cell.fc-day.fc-day-future{
+    background-color: rgb(250, 253, 255) !important;
+}
+.fc-day.fc-day-future.fc-timegrid-col{
+    border-style: groove;
+    border-color: rgb(0, 0, 0) !important;
+    z-index: 100;
+}
+
+.fc-header-toolbar.fc-toolbar{
+    background-color: rgb(250, 253, 255) !important;
+    border-radius: 20px;
+    padding: 10px 20px 10px 20px;
+}
+
+
+@media (max-width: 768px) {
+.calendar-container {
+    width: 100%; 
+    
+}
+.fc-timegrid-slot {
+    height: 45px !important; 
+}
+.calendario-container {
+    margin-top:60px;
+    
+}
+}
+

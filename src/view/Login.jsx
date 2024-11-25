@@ -1,6 +1,6 @@
 import '../css/login.css';
 import { useState } from 'react';
-import { registrarUsuario, loguearUsuario } from '../apis/cncApiUsuarios';
+import { registrarUsuario, loguearUsuario } from '../controller-front/apis/cncApiUsuarios';
 import { useNavigate } from 'react-router-dom';
 
 

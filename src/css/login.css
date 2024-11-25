@@ -12,11 +12,22 @@
   position:fixed;
   width: 600px;
   height: 450px;
-
   border-radius: 10px;
   
 
 
+}
+@media(max-width:768px){
+  .contenedor-Login-Registro {
+    position:fixed;
+    width: 350px;
+  }
+
+  .login-container,
+  .registro-container {
+    padding: 0;
+    
+  }
 }
 
 .login-container,

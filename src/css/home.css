@@ -1,0 +1,33 @@
+.layout-home {
+    display: grid;
+    grid-template-columns: 250px 1fr; /* 250px para Sidebar, el resto para Home */
+    height: 100vh; /* Ocupa toda la altura de la pantalla */  
+  }
+  
+.content-home {
+  padding: 30px; /* Espaciado interno opcional */
+  overflow-y: auto; /* Si el contenido es largo, permite scroll */
+}
+
+
+.sidebar-home.reservando{
+  z-index:2;
+}
+
+.content-home.reservando{
+  z-index:1;
+}
+
+.layout-home.reservando{
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: all 0.2s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .layout-home {
+    display: grid;
+    grid-template-columns: 0px 1fr; 
+    z-index: 1;
+    height: 100vh; 
+  }
+  }

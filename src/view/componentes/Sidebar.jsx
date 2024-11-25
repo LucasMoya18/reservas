@@ -4,10 +4,14 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
-function Sidebar() {
+function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando}) {
     const [isOpen, setIsOpen] = useState(false);
     const [userData,setUserData] = useState('');
+    const screenWidth = window.innerWidth;
 
+    function handleIsReservando(){
+        setIsReservando(!isReservando)
+    }
 
     const navegar = useNavigate();
     function toggleSidebar(){
@@ -56,6 +60,18 @@ function Sidebar() {
                     <button className='Log-Out' onClick={cerrarSesionOP}>Cerrar sesión</button>
                 </div>
                 <div className="options">
+                    <button className="option-btn" onClick={()=>{
+                        handleIsReservando()
+                        if(screenWidth <=768){
+                            toggleSidebar()
+                        }
+
+                    }}>Reservar</button>
+                    <button className="option-btn">OPCIONES</button>
+                    <button className="option-btn">OPCIONES</button>
+                    <button className="option-btn">OPCIONES</button>
+                    <button className="option-btn">OPCIONES</button>
+                    <button className="option-btn">OPCIONES</button>
                     <button className="option-btn">OPCIONES</button>
                     <button className="option-btn">OPCIONES</button>
                     <button className="option-btn">OPCIONES</button>

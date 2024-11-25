@@ -3,3 +3,11 @@ html, body {
     width: 100%;
     margin: 0;
   }
+
+::-webkit-scrollbar{
+  background-color: rgb(216, 254, 248);
+}
+
+::-webkit-scrollbar-thumb{
+  background: linear-gradient(rgb(188, 188, 255),rgb(181, 227, 249));
+}
