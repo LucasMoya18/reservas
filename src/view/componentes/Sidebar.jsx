@@ -4,13 +4,19 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
-function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando}) {
+function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit, setIdEdit,idUsEdit,setIdUsEdit,isCancel,setIsCancel}) {
     const [isOpen, setIsOpen] = useState(false);
     const [userData,setUserData] = useState('');
     const screenWidth = window.innerWidth;
+    function handleIsCancel(val){
+        setIsCancel(val)
+    }
+    function handleIsReservando(val){
+        setIsReservando(val)
+    }
 
-    function handleIsReservando(){
-        setIsReservando(!isReservando)
+    function handleIsEditando(val){
+        setIsEditando(val)
     }
 
     const navegar = useNavigate();
@@ -60,15 +66,53 @@ function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando}) {
                     <button className='Log-Out' onClick={cerrarSesionOP}>Cerrar sesión</button>
                 </div>
                 <div className="options">
-                    <button className="option-btn" onClick={()=>{
-                        handleIsReservando()
+                    <button className={`option-btn ${isReservando ? 'btn-activo' : ''}`} onClick={()=>{
+                        handleIsReservando(true)
+                        handleIsEditando(false)
+                        setIdEdit(false);
+                        setIdUsEdit(false);
+                        handleIsCancel(false);
+                        if(isReservando){
+                            handleIsReservando(false)
+                        }
+
                         if(screenWidth <=768){
                             toggleSidebar()
                         }
 
-                    }}>Reservar</button>
-                    <button className="option-btn">OPCIONES</button>
-                    <button className="option-btn">OPCIONES</button>
+                    }}>{isReservando ? 'Cancelar reserva' : 'Reservar'}</button>
+                    <button className={`option-btn ${isEditando ? 'btn-activo' : ''}`} onClick={()=>{
+                        handleIsEditando(true);
+                        handleIsReservando(false);
+                        setIdEdit(false);
+                        setIdUsEdit(false);
+                        handleIsCancel(false);
+
+                        if (isEditando){
+                            handleIsEditando(false);
+                            setIdEdit(false);
+                            setIdUsEdit(false);
+                        }
+                        if(screenWidth <=768){
+                            toggleSidebar();
+                        }
+
+                    }}>{isEditando ? 'Cancelar edicion' : 'Editar'}</button>  
+                    <button className={`option-btn ${isCancel ? 'btn-activo' : ''}`}onClick={()=>{
+                        handleIsCancel(true);
+                        handleIsEditando(false);
+                        handleIsReservando(false);
+                        setIdEdit(false);
+                        setIdUsEdit(false);
+
+                        if (isCancel){
+                            handleIsCancel(false);;
+                            setIdEdit(false);
+                            setIdUsEdit(false);
+                        }
+                        if(screenWidth <=768){
+                            toggleSidebar();
+                        }}}>{isCancel ? 'Volver' : 'Cancelar reserva'}</button>
                     <button className="option-btn">OPCIONES</button>
                     <button className="option-btn">OPCIONES</button>
                     <button className="option-btn">OPCIONES</button>

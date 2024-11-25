@@ -9,24 +9,40 @@ function Home(){
     const navegar = useNavigate();
     const [isReservando, setIsReservando] = useState(false);
     const [isEditando, setIsEditando] = useState(false);
-    let swalInstance = null;
+    const [idEdit,setIdEdit] = useState(false)
+    const [idUsEdit,setIdUsEdit] =  useState(false)
+    const [isCancel,setIsCancel] = useState(false)
     useEffect( ()=>{
         const isAuth = localStorage.getItem('isAuth');
         const usuarioRAW = localStorage.getItem('userActivo');
+        const usuarioObj = JSON.parse(usuarioRAW)
 
         if(!isAuth){
             navegar('/login');
-            const usuarioObj = JSON.parse(usuarioRAW)
         }
     },[])
     return (<>
-        <div className={`layout-home ${isReservando || isEditando ? 'reservando' : ''}`}>
-            <div className={`sidebar-home ${isReservando || isEditando ? 'reservando' : ''}`}>
-                <Sidebar isReservando={isReservando} setIsReservando={setIsReservando} isEditando={isEditando} setIsEditando={setIsEditando}/>
+        <div className={`layout-home ${isReservando || isEditando || isCancel ? 'reservando' : ''}`}>
+
+            <div className={`sidebar-home ${isReservando || isEditando || isCancel ? 'reservando' : ''}`}>
+                <Sidebar 
+                isReservando={isReservando} setIsReservando={setIsReservando} 
+                isEditando={isEditando} setIsEditando={setIsEditando} 
+                idEdit={idEdit} setIdEdit={setIdEdit}
+                idUsEdit={idUsEdit} setIdUsEdit={setIdUsEdit}
+                isCancel={isCancel} setIsCancel={setIsCancel}
+                />
             </div>
-            <div className={`content-home ${isReservando || isEditando ? 'reservando' : ''}`}>
-                <Calendario isReservando={isReservando} setIsReservando={setIsReservando} isEditando={isEditando} setIsEditando={setIsEditando}/>
+
+            <div className={`content-home ${isReservando || isEditando || isCancel ? 'reservando' : ''}`}>
+                <Calendario 
+                isReservando={isReservando} setIsReservando={setIsReservando} 
+                isEditando={isEditando} setIsEditando={setIsEditando} 
+                idEdit={idEdit} setIdEdit={setIdEdit}
+                idUsEdit={idUsEdit} setIdUsEdit={setIdUsEdit}
+                isCancel={isCancel} setIsCancel={setIsCancel}/>
             </div>
+
         </div>
         
     </>)
