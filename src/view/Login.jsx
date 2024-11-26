@@ -1,8 +1,8 @@
 import '../css/login.css';
-import { useState } from 'react';
-import { registrarUsuario, loguearUsuario } from '../controller-front/apis/cncApiUsuarios';
+import { useEffect, useState } from 'react';
+import { registrarUsuario, loguearUsuario,getUsers } from '../controller-front/apis/cncApiUsuarios';
 import { useNavigate } from 'react-router-dom';
-
+import Swal from 'sweetalert2';
 
 
 function Login() {
@@ -17,6 +17,30 @@ function Login() {
     const [errorExiste,SetErrorExst] = useState(false);
     const navegar = useNavigate();
 
+    useEffect(()=>{
+
+        async function getUs(){
+            const usrs = await getUsers();
+            if(usrs){
+                localStorage.setItem('noUsers',true)
+                Swal.fire({
+                    title: "No existen usuarios.",
+                    text: `Como no existen usuarios, debe crear un usuario administrador.`,
+                    icon: "info",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Entendido",
+                  })
+                handleToggleRegistro()
+
+            }
+        }
+        getUs()
+
+        const isAuth = localStorage.getItem('isAuth');
+        if(isAuth){
+            navegar('/')
+        }
+    },[])
 
 
 
@@ -38,7 +62,7 @@ function Login() {
         setPasswUserRegister('');
     }
 
-
+    
 
     function handleLoginEmail(e){
         setEmailUserLogin(e);
@@ -91,11 +115,7 @@ function Login() {
     //VALIDAR REGISTRO
     async function handleRegisterVal(e){
         e.preventDefault();
-        const datosUsuario = {
-            nombre: nameUserRegister,
-            email: emailUserRegister,
-            passw: passwUserRegister
-        }
+
 
         const credLog = {
             email: emailUserRegister,
@@ -103,7 +123,7 @@ function Login() {
         }
         
 
-        const respuesta = await registrarUsuario(datosUsuario);
+        const respuesta = await registrarUsuario(nameUserRegister,emailUserRegister, passwUserRegister);
         if (respuesta){
             const log = await loguearUsuario(credLog)
             if (log){

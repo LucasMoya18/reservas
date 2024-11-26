@@ -25,16 +25,17 @@ export async function conseguirReservas(){
 
         const usuarioRAW = localStorage.getItem('userActivo');
         const usuarioObj = JSON.parse(usuarioRAW)
-        
+        console.log(dat)
         dat.map((value)=>{
             listaFormateada.push({
                 id: value.id,
-                title: value.titulo,
+                title: usuarioObj.rol == 'Cliente'? value.usuario_id == usuarioObj.id ? value.titulo:'Reserva' : value.titulo,
                 start: value.fecha_inicio,
                 end: value.fecha_fin,
-                backgroundColor: value.usuario_id==usuarioObj.id ? '#32a830' : value.backgroundColor ,
+                backgroundColor: value.usuario_id==usuarioObj.id && value.render=='none' ? '#32a830' : value.backgroundColor ,
                 textColor: value.textColor,
-                id_us: value.usuario_id
+                id_us: value.usuario_id,
+                render: dat.back
             })
         })
        

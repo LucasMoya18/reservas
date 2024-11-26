@@ -12,6 +12,9 @@ function Home(){
     const [idEdit,setIdEdit] = useState(false)
     const [idUsEdit,setIdUsEdit] =  useState(false)
     const [isCancel,setIsCancel] = useState(false)
+    const [isModificandoHorario, setIsModificandoHorario] = useState(false)
+
+
     useEffect( ()=>{
         const isAuth = localStorage.getItem('isAuth');
         const usuarioRAW = localStorage.getItem('userActivo');
@@ -22,25 +25,27 @@ function Home(){
         }
     },[])
     return (<>
-        <div className={`layout-home ${isReservando || isEditando || isCancel ? 'reservando' : ''}`}>
+        <div className={`layout-home ${isReservando || isEditando || isCancel ||isModificandoHorario ? 'reservando' : ''}`}>
 
-            <div className={`sidebar-home ${isReservando || isEditando || isCancel ? 'reservando' : ''}`}>
+            <div className={`sidebar-home ${isReservando || isEditando || isCancel ||isModificandoHorario ? 'reservando' : ''}`}>
                 <Sidebar 
                 isReservando={isReservando} setIsReservando={setIsReservando} 
                 isEditando={isEditando} setIsEditando={setIsEditando} 
                 idEdit={idEdit} setIdEdit={setIdEdit}
                 idUsEdit={idUsEdit} setIdUsEdit={setIdUsEdit}
                 isCancel={isCancel} setIsCancel={setIsCancel}
+                isModificandoHorario={isModificandoHorario} setIsModificandoHorario={setIsModificandoHorario}
                 />
             </div>
 
-            <div className={`content-home ${isReservando || isEditando || isCancel ? 'reservando' : ''}`}>
+            <div className={`content-home ${isReservando || isEditando || isCancel ||isModificandoHorario ? 'reservando' : ''}`}>
                 <Calendario 
                 isReservando={isReservando} setIsReservando={setIsReservando} 
                 isEditando={isEditando} setIsEditando={setIsEditando} 
                 idEdit={idEdit} setIdEdit={setIdEdit}
                 idUsEdit={idUsEdit} setIdUsEdit={setIdUsEdit}
-                isCancel={isCancel} setIsCancel={setIsCancel}/>
+                isCancel={isCancel} setIsCancel={setIsCancel}
+                isModificandoHorario={isModificandoHorario} setIsModificandoHorario={setIsModificandoHorario}/>
             </div>
 
         </div>

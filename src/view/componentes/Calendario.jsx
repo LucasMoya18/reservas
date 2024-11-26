@@ -11,13 +11,14 @@ import { succesOp,errorOp } from "../../alertas";
 import { realizarReserva,conseguirReservas,editarReserva,cancelarReserva } from "../../controller-front/apis/cncApiReservas"
 
 
-function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, idEdit, setIdEdit,idUsEdit,setIdUsEdit, isCancel,setIsCancel}){
+function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, idEdit, setIdEdit,idUsEdit,setIdUsEdit, isCancel,setIsCancel,isModificandoHorario, setIsModificandoHorario}){
   
   const screenWidth = window.innerWidth;
   const [userData,setUserData] = useState('');
   const [reservas, setReservas ] = useState([]);
   const [actReservas,actualizarReservas] = useState(true)
   const [cadFechas,setCadFechas] = useState('');
+  const [fechaFin, setFechaFin] = useState('');
 
   useEffect(() => {
     const isAuth = localStorage.getItem('isAuth');
@@ -66,7 +67,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
 
     const fechaInicioMostrada = format(fechaInicioDate, "HH:mm")
     const fechaFinalMostrada = format(fechaFinalDate, "HH:mm' 'dd-MM-yyyy" )
-
+  
     
 
 
@@ -86,47 +87,90 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
           const datosReserva = {
             usuario: userData,
             inicio: fechaInicioINSERTAR,
-            fin: fechaFinalINSERTAR
+            fin: fechaFinalINSERTAR,
+            back:'none'
           }
           handleReservar(datosReserva).then(()=>{
             setIsReservando(false)
           })
         }
       });
-    } else if (isEditando && !idUsEdit){
-      Swal.fire({
-        text: 'Para editar una reserva, primero debe de seleccionar una reserva en posesion (Verde), luego seleccionar un hora en la que se pueda reservar.',
-        icon: "info",
-        confirmButtonColor: "#3085d6",
-        confirmButtonText: "Entendido"
-      })
-    }else if (isEditando && idUsEdit && idEdit){
-      const cadenaFechaFinal = `${fechaInicioMostrada} - ${fechaFinalMostrada}`
-      Swal.fire({
-        title: "Esta seguro?",
-        text: `Quiere editar la reserva de ${cadFechas} a ${cadenaFechaFinal}?`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Reservar",
-        cancelButtonText: "Cancelar reserva"
-  
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const datosEdit = {
-            rsvId: idEdit,
-            userId: idUsEdit,
-            fe_ini: fechaInicioINSERTAR,
-            fe_fin: fechaFinalINSERTAR
-          }
-
-          handleEditarReserva(datosEdit).then(()=>{
-            handleDejarEdicion()
-          })
-        }
-      });
     }
+
+    if(isEditando){
+      if(userData.rol == 'Administrador'){
+        if (!idUsEdit){
+          Swal.fire({
+            text: 'Para editar una reserva, primero debe de seleccionar una reserva (cualquiera), luego seleccionar un hora en la que se pueda reservar.',
+            icon: "info",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Entendido"
+          })
+          
+        }else if (idUsEdit && idEdit){
+          const cadenaFechaFinal = `${fechaInicioMostrada} - ${fechaFinalMostrada}`
+          Swal.fire({
+            title: "Esta seguro?",
+            text: `Quiere editar la reserva de ${cadFechas} a ${cadenaFechaFinal}?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Editar",
+            cancelButtonText: "Cancelar edicion"
+      
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const datosEdit = {
+                rsvId: idEdit,
+                userId: idUsEdit,
+                fe_ini: fechaInicioINSERTAR,
+                fe_fin: fechaFinalINSERTAR
+              }
+  
+              handleEditarReserva(datosEdit).then(()=>{
+                handleDejarEdicion()
+              })
+            }
+          });
+        }} 
+        if(userData.rol == 'Cliente'){
+          if (!idUsEdit){
+            Swal.fire({
+              text: 'Para editar una reserva, primero debe de seleccionar una reserva en posesion (Verde), luego seleccionar un hora en la que se pueda reservar.',
+              icon: "info",
+              confirmButtonColor: "#3085d6",
+              confirmButtonText: "Entendido"
+            })
+          }else if (idUsEdit && idEdit){
+            const cadenaFechaFinal = `${fechaInicioMostrada} - ${fechaFinalMostrada}`
+            Swal.fire({
+              title: "Esta seguro?",
+              text: `Quiere editar la reserva de ${cadFechas} a ${cadenaFechaFinal}?`,
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Reservar",
+              cancelButtonText: "Cancelar reserva"
+        
+            }).then((result) => {
+              if (result.isConfirmed) {
+                const datosEdit = {
+                  rsvId: idEdit,
+                  userId: idUsEdit,
+                  fe_ini: fechaInicioINSERTAR,
+                  fe_fin: fechaFinalINSERTAR
+                }
+    
+                handleEditarReserva(datosEdit).then(()=>{
+                  handleDejarEdicion()
+                })
+              }
+              });
+          }
+        }
+      }
     
 
 
@@ -149,16 +193,21 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
   const handleEventoClick = (info)=>{
     const idusuarioEv = info.event.extendedProps.id_us;
     const idReserva = info.event.id;
+    
+    if (info.event.backgroundColor == '#a5a5a5' && isEditando){
+      return false;
+    }
 
     const fechaInicio = info.event.startStr;
     const fechaInicioDate = parseISO(fechaInicio);
-    const fechaFinalDate = addMinutes(fechaInicioDate, 30);
-
-    const fechaInicioMostrada = format(fechaInicioDate, "HH:mm")
+    const fechaFinalDate = parseISO(info.event.endStr);
+    const fechaFinalEdit = format(fechaFinalDate,  "yyyy-MM-dd' 'HH:mm" )
+    
+    const fechaInicioMostrada = format(fechaInicioDate, "HH:mm' 'dd-MM-yyyy")
     const fechaFinalMostrada = format(fechaFinalDate, "HH:mm' 'dd-MM-yyyy" )
     const cadenaFecha = `${fechaInicioMostrada} - ${fechaFinalMostrada}`
     
-    if (isEditando){
+    if (isEditando && userData.rol == 'Cliente'){
       if(userData.id == idusuarioEv && !idUsEdit){
         Swal.fire({
           title: "Esta seguro?",
@@ -189,12 +238,12 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
       }
     }
 
-    if(isCancel){
-      if(userData.id == idusuarioEv){
+    if (isEditando && userData.rol == 'Administrador'){
+      if(!idUsEdit){
         Swal.fire({
           title: "Esta seguro?",
-          text: `Quiere eliminar reserva ${cadenaFecha}`,
-          icon: "warning",
+          text: `Quiere editar reserva ${cadenaFecha}?`,
+          icon: "question",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
@@ -203,27 +252,83 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
     
         }).then((result) => {
           if (result.isConfirmed) {
-            const objDel = {
-              idReserva: idReserva,
-              idUsuario: idusuarioEv
-            }
-
-            handleCancelarReserva(objDel).then(()=>{
-              handleDejarDelete()
-            })
-
+            setIdEdit(idReserva)
+            setIdUsEdit(idusuarioEv)
+            setCadFechas(cadenaFecha)
+            
           }
         });
       }else {
         Swal.fire({
           title:'Selecciona reserva valida',
-          text: 'Para cancelar una reserva, debes seleccionar una en posesion.',
+          text: 'Para editar una reserva, primero debe de seleccionar una reserva (cualquiera), luego seleccionar un hora en la que se pueda reservar.',
           icon: "error",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "Entendido"
         })
       
       }
+    }
+
+    if(isCancel){
+      if(userData.rol == 'Cliente'){
+        if(userData.id == idusuarioEv){
+          Swal.fire({
+            title: "Esta seguro?",
+            text: `Quiere eliminar reserva ${cadenaFecha}`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Editar",
+            cancelButtonText: "Cancelar"
+      
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const objDel = {
+                idReserva: idReserva,
+                idUsuario: idusuarioEv
+              }
+  
+              handleCancelarReserva(objDel)
+  
+            }
+          });
+        }else {
+          Swal.fire({
+            title:'Selecciona reserva valida',
+            text: 'Para cancelar una reserva, debes seleccionar una en posesion.',
+            icon: "error",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Entendido"
+          })
+        
+        }
+      }else if (userData.rol == 'Administrador'){
+        if(idusuarioEv){
+          Swal.fire({
+            title: "Esta seguro?",
+            text: `Quiere eliminar reserva ${cadenaFecha}`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Editar",
+            cancelButtonText: "Cancelar"
+      
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const objDel = {
+                idReserva: idReserva,
+                idUsuario: idusuarioEv
+              }
+  
+              handleCancelarReserva(objDel);
+  
+            }
+          });
+      }}
+      
     
     
     }}
@@ -240,7 +345,47 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
     setIsCancel(false)
   }
   
+  function handleSelect(info){
+    if(isModificandoHorario && userData.rol == 'Administrador'){
+      const fechaInicio = info.startStr;
+      const fechaFinal = info.endStr;
 
+
+      const fechaInicioDate = parseISO(fechaInicio);
+      const fechaFinalDate = parseISO(fechaFinal);
+
+      const fechaInicioINSERTAR = format(fechaInicioDate, "yyyy-MM-dd' 'HH:mm:ss");
+      const fechaFinalINSERTAR = format(fechaFinalDate, "yyyy-MM-dd' 'HH:mm:ss");
+
+      console.log(fechaInicioINSERTAR, fechaFinalINSERTAR)
+
+      const fechaInicioMostrada = format(fechaInicioDate, "HH:mm' 'dd-MM-yyyy")
+      const fechaFinalMostrada = format(fechaFinalDate, "HH:mm' 'dd-MM-yyyy" )
+      Swal.fire({
+        title: "Esta seguro?",
+        text: `Quiere modificar el horario desde ${fechaInicioMostrada} hasta ${fechaFinalMostrada}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar"
+  
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const datosReserva = {
+            usuario: userData,
+            inicio: fechaInicioINSERTAR,
+            fin: fechaFinalINSERTAR,
+            back:'background'
+          }
+          handleReservar(datosReserva).then(()=>{
+            setIsReservando(false)
+          })
+        }
+      });
+    }
+  }
 
   return (
     <>
@@ -249,7 +394,8 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
           key={reservas.length}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView={screenWidth> 768 ? "timeGridWeek" : "timeGridDay" }
-          selectable={true} 
+          selectable={true}
+          select={handleSelect}
           validRange={{
             start: new Date().toISOString().split('T')[0] 
           }}

@@ -5,10 +5,22 @@ const API_URL = 'http://localhost:5000/api/users';
 
 
 
-export async function registrarUsuario(datosUsuario){
+export async function registrarUsuario(nameUserRegister,emailUserRegister,passwUserRegister){
     
+    const usrs = localStorage.getItem('noUsers');
+    const rol = usrs ? 'Administrador' : 'Cliente'
+
+
+    const datosUsuario = {
+        nombre: nameUserRegister,
+        email: emailUserRegister,
+        passw: passwUserRegister,
+        rol: rol
+    }
+
     try{
         const resultado = await axios.post(`${API_URL}/registro`, datosUsuario)
+        localStorage.removeItem('noUsers')
         return true;
     }catch(error){
         console.error('Error al registrar usuario:', error.response ? error.response.data : error.message);
@@ -30,12 +42,17 @@ export async function  loguearUsuario(credenciales){
     }
 }
 
-export async function realizarReserva(datos){
+
+
+export async function getUsers(){
     try {
-        const resp = await axios.post(`${API_URL}/reservas/registroReserva`, datos)
-        return true;
+        const resp = await axios.get(`${API_URL}/getUsers`)
+        if(resp.data.data.length === 0){
+            return true;
+        }
+        return false;
     } catch (error) {
-        console.error('Error al ingresar reserva:', error.response ? error.response.data : error.message);
+        console.error('Error al conseguir users:', error.response ? error.response.data : error.message);
         return false;
     }
 }

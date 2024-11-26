@@ -4,7 +4,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
-function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit, setIdEdit,idUsEdit,setIdUsEdit,isCancel,setIsCancel}) {
+function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit, setIdEdit,idUsEdit,setIdUsEdit,isCancel,setIsCancel,isModificandoHorario, setIsModificandoHorario}) {
     const [isOpen, setIsOpen] = useState(false);
     const [userData,setUserData] = useState('');
     const screenWidth = window.innerWidth;
@@ -47,6 +47,10 @@ function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit
           }
         })
       }
+
+    function handleIsModificandoHorario(val){
+        setIsModificandoHorario(val)
+    }
     return (
         <>
 
@@ -66,9 +70,11 @@ function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit
                     <button className='Log-Out' onClick={cerrarSesionOP}>Cerrar sesión</button>
                 </div>
                 <div className="options">
+
                     <button className={`option-btn ${isReservando ? 'btn-activo' : ''}`} onClick={()=>{
                         handleIsReservando(true)
                         handleIsEditando(false)
+                        handleIsModificandoHorario(false);
                         setIdEdit(false);
                         setIdUsEdit(false);
                         handleIsCancel(false);
@@ -84,6 +90,7 @@ function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit
                     <button className={`option-btn ${isEditando ? 'btn-activo' : ''}`} onClick={()=>{
                         handleIsEditando(true);
                         handleIsReservando(false);
+                        handleIsModificandoHorario(false);
                         setIdEdit(false);
                         setIdUsEdit(false);
                         handleIsCancel(false);
@@ -100,6 +107,7 @@ function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit
                     }}>{isEditando ? 'Cancelar edicion' : 'Editar'}</button>  
                     <button className={`option-btn ${isCancel ? 'btn-activo' : ''}`}onClick={()=>{
                         handleIsCancel(true);
+                        handleIsModificandoHorario(false);
                         handleIsEditando(false);
                         handleIsReservando(false);
                         setIdEdit(false);
@@ -112,13 +120,28 @@ function Sidebar({isReservando,setIsReservando,isEditando, setIsEditando, idEdit
                         }
                         if(screenWidth <=768){
                             toggleSidebar();
-                        }}}>{isCancel ? 'Volver' : 'Cancelar reserva'}</button>
-                    <button className="option-btn">OPCIONES</button>
-                    <button className="option-btn">OPCIONES</button>
-                    <button className="option-btn">OPCIONES</button>
-                    <button className="option-btn">OPCIONES</button>
-                    <button className="option-btn">OPCIONES</button>
-                    <button className="option-btn">OPCIONES</button>
+                        }}}>{isCancel ? 'Volver' : userData.rol=='Administrador'? 'Cancelar reserva/modificacion de horario': 'Cancelar reserva'}</button>
+                    
+                    {userData.rol == 'Administrador'? 
+                    <>
+                    <button className={`option-btn ${isModificandoHorario ? 'btn-activo' : ''}`} onClick={()=>{
+                        handleIsModificandoHorario(true);
+                        handleIsCancel(false);
+                        handleIsEditando(false);
+                        handleIsReservando(false);
+                        setIdEdit(false);
+                        setIdUsEdit(false);
+
+                        if (isModificandoHorario){
+                            handleIsModificandoHorario(false);
+                            
+                        }
+                        if(screenWidth <=768){
+                            toggleSidebar();
+                        }
+                    }}>
+                        {isModificandoHorario ? 'Cancelar Modificacion Horario' : 'Modificar Horario'}</button>
+                    </> : ''}
                 </div>
                 <div className="pagination-dots">
                     <span className="dot"></span>
