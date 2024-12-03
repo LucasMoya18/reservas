@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './view/Home';
 import Login from './view/Login';
-import Sidebar from './view/componentes/Sidebar';
+import CuadroNotificaciones from './view/componentes/CuadroNotificaciones';
 
 function App() {
     return (
@@ -12,6 +12,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />}/>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/nots" element={<CuadroNotificaciones/>}/>
+
                 </Routes>
             </div>
         </Router>
