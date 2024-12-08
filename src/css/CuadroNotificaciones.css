@@ -1,3 +1,14 @@
-.divCuadroNots{
-    width: 300px;
+.card-body.nots p{
+ margin: 0;
+}
+
+.botonesCardNots{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.toastNots{
+    z-index: 9999;
 }

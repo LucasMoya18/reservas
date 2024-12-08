@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { parseISO, addMinutes, format } from "date-fns";
 import { succesOp,errorOp } from "../../alertas";
 import { realizarReserva,conseguirReservas,editarReserva,cancelarReserva } from "../../controller-front/apis/cncApiReservas"
+import { useNavigate } from "react-router-dom";
 
 
 function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, idEdit, setIdEdit,idUsEdit,setIdUsEdit, isCancel,setIsCancel,isModificandoHorario, setIsModificandoHorario}){
@@ -19,7 +20,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
   const [actReservas,actualizarReservas] = useState(true)
   const [cadFechas,setCadFechas] = useState('');
   const [fechaFin, setFechaFin] = useState('');
-
+  const nav = useNavigate();
   useEffect(() => {
     const isAuth = localStorage.getItem('isAuth');
     const usuarioRAW = localStorage.getItem('userActivo');
@@ -40,6 +41,9 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
         clearInterval(intervalId);
       }
      
+    }else{
+      nav('/');
+
     }
   }, []);
 
@@ -50,7 +54,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
     
     const resp = await realizarReserva(dts)  
     if (resp){
-      succesOp('Operacion exitosa!','Tu reserva ha sido agendada exitosamente');
+      succesOp('Operacion exitosa!','Tu reserva ha sido solicitada exitosamente');
     }
   }
 
@@ -74,7 +78,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
     if(isReservando){
       Swal.fire({
         title: "Esta seguro?",
-        text: `Quiere reservar la siguiente fecha ${fechaInicioMostrada} - ${fechaFinalMostrada}?`,
+        text: `Quiere solicitar reservar la siguiente fecha ${fechaInicioMostrada} - ${fechaFinalMostrada}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -122,6 +126,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
           }).then((result) => {
             if (result.isConfirmed) {
               const datosEdit = {
+                usr: userData,
                 rsvId: idEdit,
                 userId: idUsEdit,
                 fe_ini: fechaInicioINSERTAR,
@@ -157,6 +162,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
             }).then((result) => {
               if (result.isConfirmed) {
                 const datosEdit = {
+                  usr: userData,
                   rsvId: idEdit,
                   userId: idUsEdit,
                   fe_ini: fechaInicioINSERTAR,
@@ -193,6 +199,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
   const handleEventoClick = (info)=>{
     const idusuarioEv = info.event.extendedProps.id_us;
     const idReserva = info.event.id;
+    console.log(info.event.extendedProps.estado)
     
     if (info.event.backgroundColor == '#a5a5a5' && isEditando){
       return false;
@@ -208,7 +215,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
     const cadenaFecha = `${fechaInicioMostrada} - ${fechaFinalMostrada}`
     
     if (isEditando && userData.rol == 'Cliente'){
-      if(userData.id == idusuarioEv && !idUsEdit){
+      if(userData.id == idusuarioEv && !idUsEdit && info.event.extendedProps.estado!='P'){
         Swal.fire({
           title: "Esta seguro?",
           text: `Quiere editar reserva ${cadenaFecha}`,
@@ -229,7 +236,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
       }else {
         Swal.fire({
           title:'Selecciona reserva valida',
-          text: 'Para editar una reserva, primero debe de seleccionar una reserva en posesion (Verde), luego seleccionar un hora en la que se pueda reservar.',
+          text: 'Para editar una reserva, primero debe de seleccionar una reserva en posesion y que este aprovada, luego seleccionar un hora en la que se pueda reservar.',
           icon: "error",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "Entendido"

@@ -15,27 +15,32 @@ export async function realizarReserva(datos){
 
 export async function conseguirReservas(){
     try {
+        const usuarioRAW = localStorage.getItem('userActivo');
+        const usuarioObj = JSON.parse(usuarioRAW)
 
         const resp = await axios.get(`${API_URL}/getReservas`)
         if (!resp.data.reservas){
             return [];
         }
+
         const listaFormateada = []
         const dat = resp.data.reservas
 
-        const usuarioRAW = localStorage.getItem('userActivo');
-        const usuarioObj = JSON.parse(usuarioRAW)
-        console.log(dat)
+        
         dat.map((value)=>{
+            if(value.usuario_id != usuarioObj.id  && value.estado == 'P' && usuarioObj.rol != 'Administrador'){
+                return {};
+            }
             listaFormateada.push({
                 id: value.id,
-                title: usuarioObj.rol == 'Cliente'? value.usuario_id == usuarioObj.id ? value.titulo:'Reserva' : value.titulo,
+                title: value.estado == 'P' ? 'En proceso' : usuarioObj.rol == 'Cliente'? value.usuario_id == usuarioObj.id ? value.titulo:'Reserva' : value.titulo,
                 start: value.fecha_inicio,
                 end: value.fecha_fin,
-                backgroundColor: value.usuario_id==usuarioObj.id && value.render=='none' ? '#32a830' : value.backgroundColor ,
+                backgroundColor: value.estado == 'P' ? '#767676' : value.usuario_id==usuarioObj.id && value.render=='none' ? '#32a830' : value.backgroundColor,
                 textColor: value.textColor,
                 id_us: value.usuario_id,
-                render: dat.back
+                render: dat.back,
+                estado: value.estado
             })
         })
        
@@ -59,6 +64,26 @@ export async function editarReserva(data){
     }
 }
 
+export async function aprovarReserva(data){
+    try {
+        const resp = await axios.put(`${API_URL}/aprovarReserva`,data)
+        return true
+    } catch (error) {
+        console.error('Error al editar reserva:', error.response ? error.response.data : error.message);
+        return false;
+    }
+}
+
+export async function aprovarModificacionReserva(data){
+    try {
+        const resp = await axios.put(`${API_URL}/aprovarModificacionReserva`,data)
+        return true
+    } catch (error) {
+        console.error('Error al editar reserva:', error.response ? error.response.data : error.message);
+        return false;
+    }
+}
+
 export async function cancelarReserva(data){
     
     data.idReserva = parseInt(data.idReserva)
@@ -66,7 +91,9 @@ export async function cancelarReserva(data){
         const resp = await axios.delete(`${API_URL}/cancelarReserva`, {
             params: {
                 idReserva: data.idReserva,
-                idUsuario: data.idUsuario
+                idUsuario: data.idUsuario,
+                usuario: data.usuario,
+                noti: data.noti
             }
         })
         return true

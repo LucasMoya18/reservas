@@ -56,3 +56,16 @@ export async function getUsers(){
         return false;
     }
 }
+
+
+export async function getUserByID(id){
+    try {
+        const resp = await axios.get(`${API_URL}/getUserByID`,{
+            params: {id}
+        })
+        return resp.data.usuario;
+    } catch (error) {
+        console.error('Error al conseguir users:', error.response ? error.response.data : error.message);
+        return false;
+    }
+}

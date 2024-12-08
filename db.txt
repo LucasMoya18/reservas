@@ -1,35 +1,44 @@
 CREATE TABLE `usuarios` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `passw` varchar(255) NOT NULL,
-  `rol` enum('usuario','admin') NOT NULL DEFAULT 'usuario',
+  `rol` varchar(255)  NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 )
 
-
 CREATE TABLE `reservas` (
   `id` int NOT NULL AUTO_INCREMENT,
   `usuario_id` int NOT NULL,
-  `titulo` varchar(255) DEFAULT NULL,
+  `titulo` varchar(255) NOT NULL,
   `fecha_inicio` datetime NOT NULL,
   `fecha_fin` datetime NOT NULL,
-  `backgroundColor` varchar(7) NOT NULL,
-  `textColor` varchar(7) NOT NULL,
-  `editable` tinyint(1) NOT NULL,
-  `render` varchar(255) DEFAULT NULL,
+  `backgroundColor` varchar(7) DEFAULT NULL,
+  `textColor` varchar(7) DEFAULT NULL,
+  `editable` tinyint(1) DEFAULT '1',
+  `render` varchar(20) DEFAULT 'none',
+  `estado` varchar(255) NOT NULL DEFAULT 'P',
+  `fecha_inicio_propuesta` datetime DEFAULT NULL,
+  `fecha_fin_propuesta` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 )
 
-create table notificaciones(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_receptor INT NOT NULL,
-    id_envia INT NOT NULL,
-    motivo VARCHAR(255) NOT NULL,
-    estado CHAR(1) NOT NULL,
-    FOREIGN KEY (id_receptor) REFERENCES usuarios(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_envia) REFERENCES usuarios(id) ON DELETE CASCADE
+CREATE TABLE `notificaciones` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_receptor` int NOT NULL,
+  `id_envia` int NOT NULL,
+  `motivo` varchar(255) NOT NULL,
+  `estado` char(1) NOT NULL,
+  `id_reserva` int DEFAULT NULL,
+  `tipo` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_reserva` (`id_reserva`),
+  KEY `id_receptor` (`id_receptor`),
+  KEY `id_envia` (`id_envia`),
+  CONSTRAINT `notificaciones_ibfk_1` FOREIGN KEY (`id_reserva`) REFERENCES `reservas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `notificaciones_ibfk_2` FOREIGN KEY (`id_receptor`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `notificaciones_ibfk_3` FOREIGN KEY (`id_envia`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 )

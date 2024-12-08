@@ -146,7 +146,7 @@
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 9999;
+    z-index: 700;
     background-color: #4c51bf;
     color: #fff;
     border: none;
@@ -161,4 +161,127 @@
     .menu-btn {
         display: block;
     }
+    
+}
+
+
+
+
+
+.logoNotificacion svg{
+    width: 25px;
+    height: 25px;   
+}
+
+
+
+
+.logoNotificacion.notisExist {
+    background-color: #fa5a5a;
+    animation: parpadeo 1s infinite;
+}
+.logoNotificacion.notisExist svg{
+    animation: bailecito 0.5s infinite;
+}
+
+/* Animación de parpadeo */
+@keyframes parpadeo {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes bailecito {
+    0%, 100% {
+        transform: rotate(0);
+    }
+    25% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+@media (max-width:768px){
+    .logoNotificacion{
+        top: 15px;
+        left: 45px;
+
+        
+    }
+}
+
+
+.overlay-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1500;
+}
+
+/* Div flotante */
+.floating-div {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    z-index: 1501; 
+    text-align: center;
+    align-items: center;
+    justify-content: center !important;
+    align-content: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.boxNotis{
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.encabezadoNots {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.cerrarIconoNots{
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s;
+    border-radius: 50%;
+    padding: 5px;
+}
+.cerrarIconoNots svg:hover{
+    color: white;
+
+}
+
+.cerrarIconoNots:hover {
+    background-color: #f66565;
+
 }
