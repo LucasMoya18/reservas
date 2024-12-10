@@ -120,7 +120,7 @@
 }
 
 .pagination-dots {
-    margin-top: auto;
+    
     display: flex;
     gap: 5px;
 }
@@ -132,12 +132,7 @@
     border-radius: 50%;
 }
 
-/* Para que las dots queden centradas en responsive */
-@media (max-width: 768px) {
-    .pagination-dots {
-        justify-content: center;
-    }
-}
+
 
 
 /* Botón Hamburguesa */

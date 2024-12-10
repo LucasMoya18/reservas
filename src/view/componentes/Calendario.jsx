@@ -10,6 +10,7 @@ import { parseISO, addMinutes, format } from "date-fns";
 import { succesOp,errorOp } from "../../alertas";
 import { realizarReserva,conseguirReservas,editarReserva,cancelarReserva } from "../../controller-front/apis/cncApiReservas"
 import { useNavigate } from "react-router-dom";
+import momentTimezone from '@fullcalendar/moment-timezone';
 
 
 function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, idEdit, setIdEdit,idUsEdit,setIdUsEdit, isCancel,setIsCancel,isModificandoHorario, setIsModificandoHorario}){
@@ -71,7 +72,8 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
 
     const fechaInicioMostrada = format(fechaInicioDate, "HH:mm")
     const fechaFinalMostrada = format(fechaFinalDate, "HH:mm' 'dd-MM-yyyy" )
-  
+    
+    
     
 
 
@@ -199,7 +201,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
   const handleEventoClick = (info)=>{
     const idusuarioEv = info.event.extendedProps.id_us;
     const idReserva = info.event.id;
-    console.log(info.event.extendedProps.estado)
+    
     
     if (info.event.backgroundColor == '#a5a5a5' && isEditando){
       return false;
@@ -364,7 +366,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
       const fechaInicioINSERTAR = format(fechaInicioDate, "yyyy-MM-dd' 'HH:mm:ss");
       const fechaFinalINSERTAR = format(fechaFinalDate, "yyyy-MM-dd' 'HH:mm:ss");
 
-      console.log(fechaInicioINSERTAR, fechaFinalINSERTAR)
+     
 
       const fechaInicioMostrada = format(fechaInicioDate, "HH:mm' 'dd-MM-yyyy")
       const fechaFinalMostrada = format(fechaFinalDate, "HH:mm' 'dd-MM-yyyy" )
@@ -414,7 +416,7 @@ function Calendario({isReservando, setIsReservando,isEditando, setIsEditando, id
           slotMaxTime="21:00:00"  
           allDaySlot={false}
           locale="es"
-          
+          timeZone="America/Santiago"
         
           
           
