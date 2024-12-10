@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { getApiUrl } from './dataApiSVR';
 
+const API_URL = `${getApiUrl()}/api/users`;
 
-// const API_URL = 'http://localhost:5000/api/users';
-const API_URL = 'http://44.201.168.81:5000/api/users';
 
 
 

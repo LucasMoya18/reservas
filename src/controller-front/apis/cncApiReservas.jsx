@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { getApiUrl } from './dataApiSVR';
 
+const API_URL = `${getApiUrl()}/api/reservas`;
 
-// const API_URL = 'http://localhost:5000/api/reservas';
-const API_URL = 'http://44.201.168.81:5000/api/reservas';
 
 export async function realizarReserva(datos){
     try {
         const resp = await axios.post(`${API_URL}/registroReserva`, datos)
+        console.log(resp)
         return true;
     } catch (error) {
         console.error('Error al ingresar reserva:', error.response ? error.response.data : error.message);
